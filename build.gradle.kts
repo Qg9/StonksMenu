@@ -20,7 +20,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation("com.ezylang:EvalEx:3.5.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
+    implementation(kotlin("stdlib"))
 }
 
 kotlin {
