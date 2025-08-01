@@ -1,0 +1,87 @@
+title: "&lMissions"
+pattern:
+  - "$ $ $ $ $ $ $ $ $"
+  - "$ * * * * * * * $"
+  - "$ * # @ % ^ & * $"
+  - "$ * * * * * * * $"
+  - "$ $ $ $ $ $ $ $ $"
+
+items:
+  '$':
+    type: STAINED_GLASS_PANE
+    data: 15
+    name: "&7"
+
+  '#':
+    type: DIAMOND_PICKAXE
+    name: "&eMineur"
+    lore:
+      - "&7Commence ta vie de mineur !"
+    enchanted: true
+
+  '@':
+    type: SKULL_ITEM
+    data: 2
+    name: "&eChasseur"
+    lore:
+      - "&7Part en chasse !"
+
+  '%':
+    type: WHEAT
+    name: "&eFermier"
+    lore:
+      - "&7Travaille la terre !"
+
+  '^':
+    type: FISHING_ROD
+    name: "&ePêcheur"
+    lore:
+      - "&7Attrape les poissons."
+
+  '&':
+    type: MAP
+    name: "&eExplorateur"
+    lore:
+      - "&7Explore le monde !"
+
+scripts:
+  '#':
+    requirement:
+      - "[perm] missions.mineur"
+      - "![eval] level < 10"
+    needed: 2
+    valid:
+      actions:
+        - "[message] &aMission Mineur acceptée !"
+        - "[sound] ENTITY_EXPERIENCE_ORB_PICKUP"
+    invalid:
+      actions:
+        - "[message] &cTu n'as pas le niveau ou la permission !"
+
+  '@':
+    actions:
+      - "[message] &aTu es maintenant un chasseur !"
+      - "[player] kit chasseur"
+      - "[close]"
+
+  '%':
+    actions:
+      - "[console] broadcast %player% a choisi la mission Fermier"
+      - "[message] &aBonne culture !"
+
+  '^':
+    actions:
+      - "[message] &aTu prends ta canne à pêche..."
+      - "[sound] ENTITY_FISHING_BOBBER_SPLASH"
+
+  '&':
+    requirement:
+      - [perm] missions.explore
+    needed: 1
+    valid:
+      actions:
+        - "[message] &aExplore !"
+        - "[update]"
+    invalid:
+      actions:
+        - "[message] &cTu ne peux pas explorer."
