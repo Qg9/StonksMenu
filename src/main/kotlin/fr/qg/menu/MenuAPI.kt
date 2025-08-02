@@ -10,12 +10,14 @@ import fr.qg.menu.actions.ScriptNode
 import fr.qg.menu.listeners.MenuListener
 import fr.qg.menu.models.MenuItem
 import fr.qg.menu.models.QGMenu
+import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
@@ -26,66 +28,64 @@ import java.util.UUID
 
 object MenuAPI {
 
-    private val openMenus: MutableMap<UUID, QGMenu> = mutableMapOf()
+    private val openMenus: MutableMap<UUID, Pair<QGMenu, (InventoryCloseEvent) -> Any>> = mutableMapOf()
 
     fun register(plugin: JavaPlugin) =
         plugin.server.pluginManager.registerEvents(MenuListener, plugin)
 
-    fun QGMenu.open(player: Player) {
-        val inventory = this.generateInventory()
-        openMenus[player.uniqueId] = this
-        player.openInventory(inventory)
-    }
-
-    fun QGMenu.open(player: Player, gens: (Inventory) -> Any) {
-        val inventory = this.generateInventory()
-        openMenus[player.uniqueId] = this
+    fun QGMenu.open(player: Player, gens: (Inventory) -> Any = {}, close: (InventoryCloseEvent) -> Any = {}) {
+        val inventory = this.generateInventory(player)
+        openMenus[player.uniqueId] = this to close
         gens.invoke(inventory)
         player.openInventory(inventory)
     }
 
     internal fun handleClick(event: InventoryClickEvent) {
         val player = event.whoClicked as? Player ?: return
-        val menu = openMenus[player.uniqueId] ?: return
+        val menu = openMenus[player.uniqueId]?.first ?: return
         if (event.view.title != menu.title) return
 
         event.isCancelled = true
         val slot = event.rawSlot
-        val item = event.currentItem
 
-        menu.onClick(player, slot, item)
+        menu.onClick(player, slot, event)
     }
 
     internal fun handleClose(event: InventoryCloseEvent) {
         val player = event.player as? Player ?: return
-        openMenus.remove(player.uniqueId)
+        openMenus.remove(player.uniqueId)?.second?.invoke(event)
     }
 
-    private fun QGMenu.generateInventory(): Inventory {
+    private fun QGMenu.generateInventory(player: Player): Inventory {
         val inv = Bukkit.createInventory(null, size, title)
 
         pattern.forEachIndexed { slot, char ->
-            val item = items[char]?.toItemStack() ?: return@forEachIndexed
+            val item = items[char]?.toItemStack(player) ?: return@forEachIndexed
             inv.setItem(slot, item)
         }
 
         return inv
     }
 
-    private fun QGMenu.onClick(player: Player, slot: Int, item: ItemStack?) {
-        this.scripts[this.pattern[slot]]?.action(this, player, slot) ?: return
+    private fun QGMenu.onClick(player: Player, slot: Int, event: InventoryClickEvent) {
+        this.scripts[this.pattern[slot]]?.action(this, player, slot, event)
     }
 
-    fun MenuItem.toItemStack(): ItemStack {
+    fun MenuItem.toItemStack(player: Player): ItemStack {
         val item = ItemStack(type, 1)
         val meta = item.itemMeta ?: return item
 
         name?.let {
-            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', it))
+            val parsed = PlaceholderAPI.setPlaceholders(player, it)
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', parsed))
         }
 
         if (lore.isNotEmpty()) {
-            meta.lore = lore.map { ChatColor.translateAlternateColorCodes('&', it) }
+            val parsedLore = lore.map {
+                val parsed = PlaceholderAPI.setPlaceholders(player, it)
+                ChatColor.translateAlternateColorCodes('&', parsed)
+            }
+            meta.lore = parsedLore
         }
 
         if (enchanted) {
