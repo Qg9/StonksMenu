@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.UUID
+import kotlin.text.Typography.section
 
 object MenuAPI {
 
@@ -98,13 +99,11 @@ object MenuAPI {
         return item
     }
 
-    fun getMenu(section: ConfigurationSection): QGMenu {
+    fun getMenu(section: ConfigurationSection) : QGMenu {
         val title = section.getString("title") ?: error("Menu must have a 'title'")
 
-        val pattern = section.getStringList("pattern")
-            .joinToString("") // concatène toutes les lignes
-            .toList() // transforme la chaîne en List<Char>
-
+        val pattern = section.getStringList("pattern").joinToString("").replace(" ", "").toList()
+        if(pattern.size > 54 || pattern.size % 9 != 0) error("Menu size must be multiple of 9 (from 9 to 54)")
         val itemsSection = section.getConfigurationSection("items")
             ?: error("Menu must have an 'items' section")
 
@@ -113,7 +112,7 @@ object MenuAPI {
             val symbol = key.first()
             val itemData = itemsSection.getConfigurationSection(key) ?: continue
 
-            val type = Material.matchMaterial(itemData.getString("type") ?: "")
+            val type = Material.matchMaterial((itemData.getString("type") ?: "").uppercase())
                 ?: error("Invalid material type for item '$key'")
 
             val data = itemData.getInt("data", 0)
