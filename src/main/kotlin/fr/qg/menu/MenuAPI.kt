@@ -103,7 +103,7 @@ object MenuAPI {
         val title = section.getString("title") ?: error("Menu must have a 'title'")
 
         val pattern = section.getStringList("pattern").joinToString("").replace(" ", "").toList()
-        if(pattern.size > 54 || pattern.size % 9 != 0) error("Menu size must be multiple of 9 (from 9 to 54)")
+        if(pattern.size > 54 || pattern.size % 9 != 0) error("Menu size must be multiple of 9 (from 9 ot")
         val itemsSection = section.getConfigurationSection("items")
             ?: error("Menu must have an 'items' section")
 
