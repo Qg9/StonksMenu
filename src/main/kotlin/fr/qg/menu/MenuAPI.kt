@@ -47,7 +47,7 @@ object MenuAPI {
         if (event.view.title != menu.title) return
 
         event.isCancelled = true
-        val slot = event.rawSlot
+        val slot = event.slot
 
         menu.onClick(player, slot, event)
     }
