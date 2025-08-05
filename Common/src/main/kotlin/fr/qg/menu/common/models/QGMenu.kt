@@ -1,6 +1,7 @@
-package fr.qg.menu.models
+package fr.qg.menu.common.models
 
-import fr.qg.menu.actions.ClickScript
+import fr.qg.menu.common.actions.ClickScript
+import fr.qg.menu.common.items.MenuItem
 
 data class QGMenu(
     val title: String,

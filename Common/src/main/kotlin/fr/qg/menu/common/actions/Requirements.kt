@@ -1,4 +1,4 @@
-package fr.qg.menu.actions
+package fr.qg.menu.common.actions
 
 import com.ezylang.evalex.Expression
 import com.ezylang.evalex.data.EvaluationValue

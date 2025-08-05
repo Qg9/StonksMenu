@@ -1,6 +1,6 @@
-package fr.qg.menu.listeners
+package fr.qg.menu.common.listeners
 
-import fr.qg.menu.MenuAPI
+import fr.qg.menu.common.MenuRegistry
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -10,11 +10,12 @@ object MenuListener : Listener {
 
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
-        MenuAPI.handleClick(event)
+        if(event.slot < 0)return
+        MenuRegistry.handleClick(event)
     }
 
     @EventHandler
     fun onClose(event: InventoryCloseEvent) {
-        MenuAPI.handleClose(event)
+        MenuRegistry.handleClose(event)
     }
 }
