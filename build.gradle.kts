@@ -18,9 +18,9 @@ allprojects {
 dependencies {
     implementation(kotlin("stdlib"))
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    implementation(project(":Common"))
-    implementation(project(":V21"))
-    implementation(project(":V8"))
+    implementation(project(path = ":Common", configuration = "default"))
+    implementation(project(path = ":V21", configuration = "default"))
+    implementation(project(path = ":V8", configuration = "default"))
 }
 
 kotlin {
