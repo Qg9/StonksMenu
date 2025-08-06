@@ -43,3 +43,7 @@ publishing {
         }
     }
 }
+
+tasks.named("publishJitpackPublicationToMavenLocal") {
+    dependsOn(tasks.named("shadowJar"))
+}
