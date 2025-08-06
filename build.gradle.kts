@@ -1,12 +1,18 @@
 plugins {
     kotlin("jvm") version "2.1.21"
     id("java-library")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.0-rc3"
 }
 
-repositories {
-    mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://dependency.download/releases")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+        maven("https://repo.imanity.dev/imanity-libraries/")
+        maven("https://jitpack.io")
+        maven("https://repo.papermc.io/repository/maven-public/")
+    }
 }
 
 dependencies {
