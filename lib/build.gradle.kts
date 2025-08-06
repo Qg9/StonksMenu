@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm") version "2.1.21"
     `java-library`
@@ -24,6 +26,10 @@ dependencies {
 
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.withType<ShadowJar> {
+    archiveClassifier.set("")
 }
 
 publishing {
