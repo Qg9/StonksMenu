@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm") version "2.1.21"
     id("java-library")
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.0.0-rc3"
 }
 
 allprojects {
@@ -22,18 +21,6 @@ dependencies {
     implementation(project(":Common"))
     implementation(project(":V21"))
     implementation(project(":V8"))
-}
-
-tasks {
-    shadowJar {
-        archiveClassifier.set("")
-        relocate("kotlin", "fr.qg.menu.utils.kotlin")
-        minimize()
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
 }
 
 kotlin {
