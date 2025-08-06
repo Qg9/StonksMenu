@@ -1,12 +1,12 @@
-# Wiki 
+# Wiki
 ## Importation
 ```kts
 repositories {
-  maven("https://jitpack.io")
+    maven("https://jitpack.io")
 }
 
 dependencies {
-  implementation("com.github.Qg9:StonksMenu:1")
+    implementation("com.github.Qg9:StonksMenu:1")
 }
 ```
 
@@ -103,18 +103,18 @@ scripts:
 
 ```
 
-### Requirement 
+### Requirement
 
-For now, there are two types of requirements: 
+For now, there are two types of requirements:
 - permissions : use [perm] prefix and after that the permission
 - evalex : use [eval] prefix and then write something using evalex language, you can use basic function for maths and operator, you can also parse placeholders inside.
-You can add "!" as first character for the negation requirement (example : require player doesn't have this permission)
+  You can add "!" as first character for the negation requirement (example : require player doesn't have this permission)
 
-### Actions 
+### Actions
 
 Basic actions is a string list of pseudo-commands : you can use [player] prefix for a player command, [console] for a console one, [message] for sending a message to the player, [sound] for sending a sound, [close] for closing the gui and [update] for updating it.
 You have the %player% placeholder.
-There is also a more complex click action : 
+There is also a more complex click action :
 ```yaml
 requirement:
   - "[perm] missions.mineur"
@@ -146,8 +146,8 @@ val char = '$' //char where you put then
 val nullItem = ItemStack(Material.BARRIER) //default item
 val menu = MenuAPI.getMenu(configurationSection)
 
-menu.pattern.withIndex().filter { (i, c) -> c == char }.map { (i, _) -> i }.forEach { 
-            inv.setItem(it, heads.removeLastOrNull() ?: nullItem)
+menu.pattern.withIndex().filter { (i, c) -> c == char }.map { (i, _) -> i }.forEach {
+    inv.setItem(it, heads.removeLastOrNull() ?: nullItem)
 }
 
 menu.open(player) //open the menu to the player
