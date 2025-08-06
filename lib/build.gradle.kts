@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.1.21"
     `java-library`
     `maven-publish`
+    id("com.gradleup.shadow") version "9.0.0-rc3"
 }
 
 repositories {
@@ -28,7 +29,8 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            from(components["kotlin"]) // ou "kotlin" si lib est Kotlin pur
+            artifact(tasks.named("shadowJar"))
+
             groupId = "com.github.Qg9"
             artifactId = "StonksMenu"
             version = "1.0.0"
