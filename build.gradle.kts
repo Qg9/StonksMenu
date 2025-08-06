@@ -26,3 +26,10 @@ dependencies {
 kotlin {
     jvmToolchain(21)
 }
+
+configurations.all {
+    attributes.attribute(
+        org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.attribute,
+        org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType.jvm
+    )
+}
