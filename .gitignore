@@ -4,3 +4,5 @@ gradle
 gradle.properties
 gradlew
 gradlew.bat
+*/build
+build
