@@ -31,6 +31,10 @@ kotlin {
 
 tasks.withType<ShadowJar> {
     archiveClassifier.set("")
+
+    mergeServiceFiles {
+        path = "META-INF/services"
+    }
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -50,7 +54,7 @@ publishing {
                 builtBy(shadowJar)
             }
 
-            artifact(sourcesJar)
+            //artifact(sourcesJar)
         }
     }
 }
