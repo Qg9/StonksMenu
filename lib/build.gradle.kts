@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "2.1.21"
     `java-library`
     `maven-publish`
-    id("com.gradleup.shadow") version "9.0.0-rc3"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 repositories {
@@ -19,9 +19,10 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+
     implementation(project(":common"))
-    implementation(project(":v21"))
     implementation(project(":v8"))
+    implementation(project(":v21"))
 }
 
 kotlin {
@@ -29,21 +30,31 @@ kotlin {
 }
 
 tasks.withType<ShadowJar> {
-    archiveClassifier.set("")
+    archiveClassifier.set("") // nom final : StonksMenu-1.0.0.jar (pas -all)
+    minimize() // optionnel : supprime les classes inutilisées
+}
+
+// (facultatif) sourcesJar pour les IDE
+val sourcesJar by tasks.creating(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
 }
 
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            artifact(tasks.named("shadowJar"))
-
             groupId = "com.github.Qg9"
             artifactId = "StonksMenu"
             version = "1.0.0"
+
+            // ➤ Publication du JAR généré par Shadow
+            val shadowJar = tasks.named<ShadowJar>("shadowJar").get()
+            artifact(shadowJar.archiveFile) {
+                builtBy(shadowJar)
+            }
+
+            // ➤ Ajout des sources (optionnel mais utile)
+            artifact(sourcesJar)
         }
     }
-}
-
-tasks.named("publishJitpackPublicationToMavenLocal") {
-    dependsOn(tasks.named("shadowJar"))
 }
