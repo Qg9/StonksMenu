@@ -29,6 +29,11 @@ kotlin {
     jvmToolchain(21)
 }
 
+tasks.named<Jar>("jar") {
+    // Empêche la génération du .jar standard utilisé par défaut
+    enabled = false
+}
+
 tasks.withType<ShadowJar> {
     archiveClassifier.set("")
 
