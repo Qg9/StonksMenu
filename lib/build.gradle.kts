@@ -30,11 +30,9 @@ kotlin {
 }
 
 tasks.withType<ShadowJar> {
-    archiveClassifier.set("") // nom final : StonksMenu-1.0.0.jar (pas -all)
-    minimize() // optionnel : supprime les classes inutilisées
+    archiveClassifier.set("")
 }
 
-// (facultatif) sourcesJar pour les IDE
 val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
@@ -47,13 +45,11 @@ publishing {
             artifactId = "StonksMenu"
             version = "1.0.0"
 
-            // ➤ Publication du JAR généré par Shadow
             val shadowJar = tasks.named<ShadowJar>("shadowJar").get()
             artifact(shadowJar.archiveFile) {
                 builtBy(shadowJar)
             }
 
-            // ➤ Ajout des sources (optionnel mais utile)
             artifact(sourcesJar)
         }
     }
