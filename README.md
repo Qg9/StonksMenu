@@ -12,6 +12,8 @@ dependencies {
 
 ## Configuration
 
+This configuration is highly inspired by SuperiorSkyblock's config system
+
 ```yaml
 title: "&lMissions"
 pattern:
@@ -102,8 +104,50 @@ scripts:
         - "[message] &cTu ne peux pas explorer."
 
 ```
+### title 
 
-### Requirement
+Add the title you want using 
+```yaml
+title: "here"
+```
+
+### pattern
+
+Set the pattern you want using 
+```yaml 
+pattern:
+  - "$ $ $ $ $ $ $ $ $"
+  - "$ * * * * * * * $"
+  - "$ * # @ % ^ & * $"
+  - "$ * * * * * * * $"
+  - "$ $ $ $ $ $ $ $ $"
+```
+
+A pattern is a string list of 1 to 6 string of 9 characters (excepting space)
+Each character represent a slot of the inventory, you will setup items in the ``items`` category.
+
+### Items
+
+```yaml
+items:
+  '$':
+    type: STAINED_GLASS_PANE
+    data: 15
+    name: "&7"
+    enchanted: true
+    lore: 
+      - "yeeha"
+```
+
+Add all the items you want in the inventory using this section. The key must be a char, 
+existing in pattern's strings (or else it will not appear). Sub-key of an item is linked to the itemstack stuff :
+- ``type`` is a material's type, of your version, see [https://helpch.at/docs/1.8/org/bukkit/Material.html](https://helpch.at/docs/1.8/org/bukkit/Material.html) for 1.8 and[https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html)
+- ``data`` for item's custommodeldata in 1.20 or just data in old versions (as instance for glass color)
+- ``name`` for item's display name, parsing placeholderapi
+- ``lore`` for item's lore, also parsing PAPI
+- ``enchanted`` if you want the item enchanted or not
+- 
+### Requirements
 
 For now, there are two types of requirements:
 - permissions : use [perm] prefix and after that the permission
@@ -162,3 +206,7 @@ val click = ClickScript { menu, player, slot ->
 menu.actions['$'] = click
 menu.open(player)
 ```
+## For the future 
+
+Incoming : more item configuration, viewrequirements and an smoother configuration system
+(things like error gui or error items explaining what's is wrong)
