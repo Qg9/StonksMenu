@@ -94,14 +94,15 @@ fun ConfigurationSection.asMenu(): QGMenu {
     val pattern = this.getStringList("pattern").joinToString("").replace(" ", "").toList()
     if (pattern.size > 54 || pattern.size % 9 != 0) error("Menu size must be multiple of 9 (from 9 to 54)")
     val itemsSection = this.getConfigurationSection("items")
-        ?: error("Menu must have an 'items' section")
 
     val items = mutableMapOf<Char, MenuItem>()
-    for (key in itemsSection.getKeys(false)) {
-        itemsSection.getConfigurationSection(key)?.let {
-            items[key.first()] = it.asMenuItem()
+
+    if (itemsSection != null)
+        for (key in itemsSection.getKeys(false)) {
+            itemsSection.getConfigurationSection(key)?.let {
+                items[key.first()] = it.asMenuItem()
+            }
         }
-    }
 
     val scripts = mutableMapOf<Char, ClickScript>()
     val scriptsSection = this.getConfigurationSection("scripts")
